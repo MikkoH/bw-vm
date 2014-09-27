@@ -33,7 +33,15 @@ ViewManager.prototype = {
 		this.s.overlap = value;
 	},
 
-	show: function( content, onComplete ) {
+	show: function( content, data, onComplete ) {
+
+		// check if data was passed in
+		if( onComplete === undefined &&
+			typeof data == 'function' ) {
+
+			onComplete = data;
+			data = null;
+		}
 
 		if( content != this.nContent &&
 			content != this.cContent ) {
@@ -45,10 +53,16 @@ ViewManager.prototype = {
 
 			this.nContent = content;
 
-			if( content.init )
-				content.init( this.swap.bind( this, this.nContent, onComplete ) ); 
-			else
+			if( content.init ) {
+
+				if( data )
+					content.init( data, this.swap.bind( this, this.nContent, onComplete ) ); 
+				else
+					content.init( this.swap.bind( this, this.nContent, onComplete ) ); 
+			} else {
+
 				this.swap( this.nContent, onComplete );
+			}
 		}
 	},
 

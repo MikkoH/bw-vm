@@ -5,9 +5,13 @@ var DURATION_INI = 30,
 
 var Content = {
 
-	init: function( onComplete ) {
+	init: function( data, onComplete ) {
+
+		if( onComplete == undefined )
+			onComplete = data;
 
 		console.log( ( Date.now() - this.startTime ), 'init', this.name );
+		console.log( 'init data', data );
 
 		setTimeout( onComplete, DURATION_INI );		
 	},
@@ -73,9 +77,9 @@ function doWithoutOverlap() {
 	c1.startTime = c2.startTime = Date.now();
 
 	console.log( '---NO OVERLAP---' );
-	v.show( c1, function() {
+	v.show( c1, 'something', function() {
 
-		v.show( c2, function() {
+		v.show( c2, 'something else', function() {
 
 			console.log( '------------\n' );
 		});
