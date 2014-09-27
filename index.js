@@ -46,9 +46,9 @@ ViewManager.prototype = {
 			this.nContent = content;
 
 			if( content.init )
-				content.init( this.swap.bind( this, onComplete ) ); 
+				content.init( this.swap.bind( this, this.nContent, onComplete ) ); 
 			else
-				this.swap( onComplete );
+				this.swap( this.nContent, onComplete );
 		}
 	},
 
@@ -81,60 +81,62 @@ ViewManager.prototype = {
 			this.cContent.resize( width, height );
 	},
 
-	swap: function( onComplete ) {
+	swap: function( newContent, onComplete ) {
 
-		var s = this.s,
-			oldContent = this.cContent,
-			newContent = this.nContent,
-			onNewIn = function() {
+		if( newContent == this.nContent ) {
 
-				if( s.onEndAniIn )
-					s.onEndAniIn( newContent, oldContent );
+			var s = this.s,
+				oldContent = this.cContent,
+				onNewIn = function() {
 
-				if( onComplete )
-					onComplete( newContent, oldContent );
-			},
-			onOldOut;
+					if( s.onEndAniIn )
+						s.onEndAniIn( newContent, oldContent );
 
-		// resize the newContent if it has a resize method
-		newContent.resize && newContent.resize( s.width, s.height );
+					if( onComplete )
+						onComplete( newContent, oldContent );
+				},
+				onOldOut;
 
-		// call a callback that we're starting to animatein content
-		if( s.onStartAniIn ) 
-			s.onStartAniIn( newContent, this.cContent );
+			// resize the newContent if it has a resize method
+			newContent.resize && newContent.resize( s.width, s.height );
 
-		// check if there's content on screen already
-		if( this.cContent ) {
+			// call a callback that we're starting to animatein content
+			if( s.onStartAniIn ) 
+				s.onStartAniIn( newContent, this.cContent );
 
-			// setup the old out function
-			onOldOut = function() {
+			// check if there's content on screen already
+			if( this.cContent ) {
 
-				if( s.onEndAniOut )
-					s.onEndAniOut( newContent, oldContent );
+				// setup the old out function
+				onOldOut = function() {
 
-				if( oldContent.destroy )
-					oldContent.destroy();
+					if( s.onEndAniOut )
+						s.onEndAniOut( newContent, oldContent );
 
-				if( !s.overlap )
+					if( oldContent.destroy )
+						oldContent.destroy();
+
+					if( !s.overlap )
+						newContent.aniIn( onNewIn );
+				};
+
+				// call a callback that we're starting to animateout content
+				if( s.onStartAniOut )
+					s.onStartAniOut( newContent, oldContent );
+
+				oldContent.aniOut( onOldOut );
+
+				if( s.overlap )
 					newContent.aniIn( onNewIn );
-			};
+			} else {
 
-			// call a callback that we're starting to animateout content
-			if( s.onStartAniOut )
-				s.onStartAniOut( newContent, oldContent );
-
-			oldContent.aniOut( onOldOut );
-
-			if( s.overlap )
+				// just bring new content
 				newContent.aniIn( onNewIn );
-		} else {
+			}
 
-			// just bring new content
-			newContent.aniIn( onNewIn );
+			this.cContent = newContent;
+			this.nContent = null;
 		}
-
-		this.cContent = newContent;
-		this.nContent = null;
 	}
 };
 
