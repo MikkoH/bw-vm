@@ -21,5 +21,6 @@
   "bugs": {
     "url": "https://github.com/MikkoH/bw-vm/issues"
   },
-  "homepage": "https://github.com/MikkoH/bw-vm"
+  "homepage": "https://github.com/MikkoH/bw-vm",
+  "dependencies": {}
 }

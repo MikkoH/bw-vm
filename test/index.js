@@ -7,28 +7,33 @@ var Content = {
 
 	init: function( onComplete ) {
 
-		console.log( ( Date.now() - this.startTime ) + ' init ' + this.name );
+		console.log( ( Date.now() - this.startTime ), 'init', this.name );
 
 		setTimeout( onComplete, DURATION_INI );		
 	},
 
+	resize: function( w, h ) {
+
+		console.log( ( Date.now() - this.startTime ), 'resize', this.name, w, h );
+	},
+
 	aniIn: function( onComplete ) {
 
-		console.log( ( Date.now() - this.startTime ) + ' aniIn ' + this.name );
+		console.log( ( Date.now() - this.startTime ), 'aniIn', this.name );
 
 		setTimeout( onComplete, DURATION_ANI );
 	},
 
 	aniOut: function( onComplete ) {
 
-		console.log( ( Date.now() - this.startTime ) + ' aniOut ' + this.name );
+		console.log( ( Date.now() - this.startTime ), 'aniOut', this.name );
 
 		setTimeout( onComplete, DURATION_ANI );
 	},
 
 	destroy: function() {
 
-		console.log( ( Date.now() - this.startTime ) + ' destroyed ' + this.name );
+		console.log( ( Date.now() - this.startTime ), 'destroyed', this.name );
 	}
 };
 

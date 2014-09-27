@@ -1,4 +1,6 @@
 // overlap
+// width
+// height
 // onStartAniIn
 // onEndAniIn
 // onStartAniOut
@@ -12,6 +14,8 @@ function ViewManager( settings ) {
 	var s = this.s = settings || {};
 
 	s.overlap = s.overlap === undefined ? true : s.overlap;
+	s.width = s.width || 980;
+	s.height = s.height || 570;
 
 	this.cContent = null;
 	this.nContent = null;
@@ -66,6 +70,17 @@ ViewManager.prototype = {
 		}
 	},
 
+	resize: function( width, height ) {
+
+		var s = this.s;
+
+		s.width = width;
+		s.height = height;
+
+		if( this.cContent && this.cContent.resize )
+			this.cContent.resize( width, height );
+	},
+
 	swap: function( onComplete ) {
 
 		var s = this.s,
@@ -80,6 +95,9 @@ ViewManager.prototype = {
 					onComplete( newContent, oldContent );
 			},
 			onOldOut;
+
+		// resize the newContent if it has a resize method
+		newContent.resize && newContent.resize( s.width, s.height );
 
 		// call a callback that we're starting to animatein content
 		if( s.onStartAniIn ) 
