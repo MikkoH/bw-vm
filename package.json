@@ -1,0 +1,25 @@
+{
+  "name": "bw-vm",
+  "version": "1.0.0",
+  "description": "This is a view manager for bigwheel (it brings in out content)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MikkoH/bw-vm.git"
+  },
+  "keywords": [
+    "bigwheel",
+    "view",
+    "manager",
+    "mvc"
+  ],
+  "author": "Mikko Haapoja <me@mikkoh.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MikkoH/bw-vm/issues"
+  },
+  "homepage": "https://github.com/MikkoH/bw-vm"
+}
