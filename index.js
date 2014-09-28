@@ -46,10 +46,8 @@ ViewManager.prototype = {
 		if( content != this.nContent &&
 			content != this.cContent ) {
 
-			if( this.nContent ) {
-
+			if( this.nContent && this.nContent.destroy )
 				this.nContent.destroy();
-			}
 
 			this.nContent = content;
 
@@ -68,19 +66,25 @@ ViewManager.prototype = {
 
 	clear: function( onComplete ) {
 
-		if( this.nContent )
+		if( this.nContent && this.nContent.destroy )
 			this.nContent.destroy();
 
 		if( this.cContent ) {
 
-			this.cContent.aniOut( function( oldContent ) {
+			var onOldOut = function( oldContent ) {
 
 				if( oldContent.destroy )
 					oldContent.destroy();
 
 				if( onComplete )
 					onComplete( oldContent );
-			}.bind( this, this.cContent ));
+			}.bind( this, this.cContent )
+
+			// now take out countent
+			if( this.cContent.aniOut )
+				this.cContent.aniOut( onOldOut );
+			else
+				onOldOut();
 		}
 	},
 
@@ -130,22 +134,38 @@ ViewManager.prototype = {
 					if( oldContent.destroy )
 						oldContent.destroy();
 
-					if( !s.overlap )
-						newContent.aniIn( onNewIn );
+					if( !s.overlap ) {
+
+						if( newContent.aniIn )
+							newContent.aniIn( onNewIn );
+						else
+							onNewIn();
+					}
 				};
 
 				// call a callback that we're starting to animateout content
 				if( s.onStartAniOut )
 					s.onStartAniOut( newContent, oldContent );
 
-				oldContent.aniOut( onOldOut );
+				if( oldContent.aniOut )
+					oldContent.aniOut( onOldOut );
+				else
+					onOldOut();
 
-				if( s.overlap )
-					newContent.aniIn( onNewIn );
+				if( s.overlap ) {
+
+					if( newContent.aniIn )
+						newContent.aniIn( onNewIn );
+					else
+						onNewIn();
+				}
 			} else {
 
 				// just bring new content
-				newContent.aniIn( onNewIn );
+				if( newContent.aniIn )
+					newContent.aniIn( onNewIn );
+				else
+					onNewIn();
 			}
 
 			this.cContent = newContent;

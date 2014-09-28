@@ -11,7 +11,7 @@ var Content = {
 			onComplete = data;
 
 		console.log( ( Date.now() - this.startTime ), 'init', this.name );
-		console.log( 'init data', data );
+		console.log( 'model data', data );
 
 		setTimeout( onComplete, DURATION_INI );		
 	},
@@ -77,9 +77,32 @@ function doWithoutOverlap() {
 	c1.startTime = c2.startTime = Date.now();
 
 	console.log( '---NO OVERLAP---' );
-	v.show( c1, 'something', function() {
+	v.show( c1, 'some model', function() {
 
-		v.show( c2, 'something else', function() {
+		v.show( c2, 'some other model', function() {
+
+			console.log( '------------\n' );
+			doWithOnlyInitAndDestroy();
+		});
+	});
+}
+
+function doWithOnlyInitAndDestroy() {
+
+	var v = vm(),
+		c1 = Object.create( Content ),
+		c2 = Object.create( Content );
+
+	c1.name = 'c1';
+	c2.name = 'c2';
+	c1.startTime = c2.startTime = Date.now();
+	c1.aniIn = c2.aniIn = undefined;
+	c1.aniOut = c2.aniOut = undefined;
+
+	console.log( '---NO ANI---' );
+	v.show( c1, function() {
+
+		v.show( c2, function() {
 
 			console.log( '------------\n' );
 		});
