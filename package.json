@@ -1,6 +1,6 @@
 {
   "name": "bw-vm",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This is a view manager for bigwheel (it brings in out content)",
   "main": "index.js",
   "scripts": {
