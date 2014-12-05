@@ -43,20 +43,20 @@ ViewManager.prototype = {
 			data = null;
 		}
 
+		this.data = data;
+
 		if( content != this.nContent &&
 			content != this.cContent ) {
 
 			if( this.nContent && this.nContent.destroy )
-				this.nContent.destroy();
+				this.nContent.destroy(this.data, function() { });
 
 			this.nContent = content;
 
 			if( content.init ) {
 
-				if( data )
-					content.init( data, this.swap.bind( this, this.nContent, onComplete ) ); 
-				else
-					content.init( this.swap.bind( this, this.nContent, onComplete ) ); 
+				content.init( this.data, this.swap.bind( this, this.nContent, onComplete ) ); 
+
 			} else {
 
 				this.swap( this.nContent, onComplete );
@@ -67,14 +67,14 @@ ViewManager.prototype = {
 	clear: function( onComplete ) {
 
 		if( this.nContent && this.nContent.destroy )
-			this.nContent.destroy();
+			this.nContent.destroy( this.data, function() { } );
 
 		if( this.cContent ) {
 
 			var onOldOut = function( oldContent ) {
 
 				if( oldContent.destroy )
-					oldContent.destroy();
+					oldContent.destroy( this.data , function() { } );
 
 				if( onComplete )
 					onComplete( oldContent );
@@ -82,7 +82,7 @@ ViewManager.prototype = {
 
 			// now take out countent
 			if( this.cContent.aniOut )
-				this.cContent.aniOut( onOldOut );
+				this.cContent.aniOut( this.data , onOldOut );
 			else
 				onOldOut();
 		}
@@ -132,12 +132,12 @@ ViewManager.prototype = {
 						s.onEndAniOut( newContent, oldContent );
 
 					if( oldContent.destroy )
-						oldContent.destroy();
+						oldContent.destroy( this.data, function() { } );
 
 					if( !s.overlap ) {
 
 						if( newContent.aniIn )
-							newContent.aniIn( onNewIn );
+							newContent.aniIn( this.data, onNewIn );
 						else
 							onNewIn();
 					}
@@ -148,14 +148,14 @@ ViewManager.prototype = {
 					s.onStartAniOut( newContent, oldContent );
 
 				if( oldContent.aniOut )
-					oldContent.aniOut( onOldOut );
+					oldContent.aniOut( this.data, onOldOut );
 				else
 					onOldOut();
 
 				if( s.overlap ) {
 
 					if( newContent.aniIn )
-						newContent.aniIn( onNewIn );
+						newContent.aniIn( this.data, onNewIn );
 					else
 						onNewIn();
 				}
@@ -163,7 +163,7 @@ ViewManager.prototype = {
 
 				// just bring new content
 				if( newContent.aniIn )
-					newContent.aniIn( onNewIn );
+					newContent.aniIn( this.data, onNewIn );
 				else
 					onNewIn();
 			}
