@@ -141,7 +141,7 @@ ViewManager.prototype = {
 						else
 							onNewIn();
 					}
-				};
+				}.bind(this);
 
 				// call a callback that we're starting to animateout content
 				if( s.onStartAniOut )
