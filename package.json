@@ -4,7 +4,20 @@
   "description": "This is a view manager for bigwheel (it brings in out content)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape test/*.js"
+  },
+  "testling": {
+    "files": "test/*.js",
+    "browsers": [
+      "ie/8..latest",
+      "chrome/31..latest",
+      "firefox/33..latest",
+      "safari/6..latest",
+      "opera/11.0..latest",
+      "iphone/6..latest",
+      "ipad/6..latest",
+      "android-browser/4.2..latest"
+    ]
   },
   "repository": {
     "type": "git",
@@ -22,7 +35,8 @@
     "url": "https://github.com/MikkoH/bw-vm/issues"
   },
   "homepage": "https://github.com/MikkoH/bw-vm",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "tape": "^3.0.3"
   }
 }
