@@ -45,8 +45,7 @@ ViewManager.prototype = {
 
 		this.data = data;
 
-		if( content != this.nContent &&
-			content != this.cContent ) {
+		if( content != this.nContent && content != this.cContent ) {
 
 			if( this.nContent && this.nContent.destroy )
 				this.nContent.destroy(this.data, function() { });
@@ -56,7 +55,6 @@ ViewManager.prototype = {
 			if( content.init ) {
 
 				content.init( this.data, this.swap.bind( this, this.nContent, onComplete ) ); 
-
 			} else {
 
 				this.swap( this.nContent, onComplete );
