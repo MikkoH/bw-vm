@@ -1,110 +1,243 @@
 var vm = require( '../' );
+var test = require( 'tape' );
 
-var DURATION_INI = 30,
-	DURATION_ANI = 1000;
+setTimeout( function() {}, 1000 );
 
-var Content = {
+var manager = vm();
+var idxText = 0;
+var t;
+var passedData = { thisWorks: true };
+var section5;
 
-	init: function( data, onComplete ) {
+var section = function( name ) {
 
-		if( onComplete == undefined )
-			onComplete = data;
+	this.name = name;
+};
 
-		console.log( ( Date.now() - this.startTime ), 'init', this.name );
-		console.log( 'model data', data );
+section.prototype = {
 
-		setTimeout( onComplete, DURATION_INI );		
+	init: function( req, done ) {
+
+		switch( idxText ) {
+
+			case 1:
+				t.equal( this.name, 'section 1', 'section 1 init' );
+				t.equal( req, passedData, 'passed data' );
+				done();
+			break;
+
+			case 3: 
+				t.equal( this.name, 'section 2', 'section 2 init' );
+				done();
+			break;
+
+			case 6:
+				t.equal( this.name, 'section 5', 'section 5 init' );
+				done();
+				nextTest();
+			break;
+
+			case 7:
+				t.fail( 'Allowed bringing in a duplicate section' );
+				done();
+			break;
+		}
 	},
 
-	resize: function( w, h ) {
+	resize: function( width, height ) {
 
-		console.log( ( Date.now() - this.startTime ), 'resize', this.name, w, h );
+		switch( idxText ) {
+
+			case 1:
+				t.equal( width, 980, 'width is set to default' );
+				t.equal( height, 570, 'height is set to default' );
+			break;
+
+			case 2:
+				t.equal( width, 333, 'width is correct after resize' );
+				t.equal( height, 33, 'height is correct after resize' );
+				nextTest();
+			break;
+		}
 	},
 
-	aniIn: function( onComplete ) {
+	aniIn: function( req, done ) {
+		switch( idxText ) {
 
-		console.log( ( Date.now() - this.startTime ), 'aniIn', this.name );
+			case 1:
+				t.equal( this.name, 'section 1', 'section 1 aniIn' );
+				nextTest();
+				done();
+			break;
 
-		setTimeout( onComplete, DURATION_ANI );
+			case 3:
+				t.equal( this.name, 'section 2', 'section 2 aniIn' );
+				done();
+				nextTest();
+			break;
+
+			case 4:
+				t.equal( this.name, 'section 3', 'section 3 aniIn' );
+				done();
+
+				nextTest();
+			break;
+
+			case 6:
+				t.equal( this.name, 'section 5', 'section 5 init' );
+				done();
+			break;
+		}
 	},
 
-	aniOut: function( onComplete ) {
+	aniOut: function( req, done ) {
+		switch( idxText ) {
 
-		console.log( ( Date.now() - this.startTime ), 'aniOut', this.name );
+			case 3:
+				t.equal( this.name, 'section 1', 'section 1 aniOut' );
+				done();
+			break;
 
-		setTimeout( onComplete, DURATION_ANI );
+			case 4:
+				t.equal( this.name, 'section 2', 'section 2 aniOut' );
+				done();
+			break;
+
+			case 5:
+				t.equal( this.name, 'section 3', 'section 3 aniOut' );
+				done();
+			break;
+		}
 	},
 
-	destroy: function() {
+	destroy: function( req, done ) {
+		switch( idxText ) {
 
-		console.log( ( Date.now() - this.startTime ), 'destroyed', this.name );
+			case 3:
+				t.equal( this.name, 'section 1', 'section 1 destroy' );
+				done();
+			break;
+
+			case 4:
+				t.equal( this.name, 'section 2', 'section 2 destroy' );
+				done();
+			break;
+
+			case 5:
+				t.equal( this.name, 'section 3', 'section 3 destroy' );
+				done();
+				nextTest();
+			break;
+
+			case 6:
+				t.equal( this.name, 'section 4', 'section 4 destroy' );
+				done();
+			break;
+		}
 	}
 };
 
-doNormal();
+function nextTest() {
 
-function doNormal( onComplete ) {
+	idxText++;
 
-	var v = vm(),
-		c1 = Object.create( Content ),
-		c2 = Object.create( Content );
+	switch( idxText ) {
+		case 1:
 
-	c1.name = 'c1';
-	c2.name = 'c2';
-	c1.startTime = c2.startTime = Date.now();
+			test( 'section init, aniIn, resize', function( nT ) {
 
-	console.log( '---NORMAL---' );
-	v.show( c1, function() {
+				t = nT;
+				t.plan( 6 );
 
-		v.show( c2, function() {
+				manager.show( new section( 'section 1' ), passedData, function() {
 
-			console.log( '--------------\n' );
-			doWithoutOverlap();
-		});
-	});
+					t.pass( 'called onComplete' );
+				});
+			});
+			
+		break;
+
+		case 2: 
+			test( 'resize section that is in', function( nT ) {
+
+				t = nT;
+				t.plan( 2 );
+
+				manager.resize( 333, 33 );
+			});
+		break;
+			
+		case 3:
+			test( 'bring in section 2', function( nT ) {
+
+				t = nT;
+				t.plan( 4 );
+
+				manager.show( new section( 'section 2' ) );
+			});
+		break;
+
+		case 4:
+
+			test( 'bring in section 3 without init', function( nT ) {
+
+				t = nT;
+				t.plan( 3 );
+
+				var nSection = new section( 'section 3' );
+
+				nSection.init = undefined;
+
+				manager.show( nSection );
+			});
+		break;
+
+		case 5:
+
+			test( 'bring in section 4 without init, aniIn', function( nT ) {
+
+				t = nT;
+				t.plan( 2 );
+
+				var nSection = new section( 'section 4' );
+
+				nSection.init = undefined;
+				nSection.aniIn = undefined;
+				nSection.aniOut = undefined;
+
+				manager.show( nSection );
+			});
+		break;
+
+		case 6:
+
+			test( 'bring in section 5 test skipping aniOut on section 4', function( nT ) {
+
+				t = nT;
+				t.plan( 3 );
+
+				section5 = new section( 'section 5' );
+
+				manager.show( section5 );
+			});
+		break;
+
+		case 7:
+
+			test( 'bring in section 5 again', function( nT ) {
+
+				t = nT;
+				t.plan( 1 );
+
+				manager.show( section5 );
+
+				setTimeout( function() {
+
+					t.pass( 'Didn\'t duplicate section 5' );
+				}, 33 );
+			});
+		break;
+	}
 }
 
-function doWithoutOverlap() {
-
-	var v = vm( {
-			overlap: false
-		}),
-		c1 = Object.create( Content ),
-		c2 = Object.create( Content );
-
-	c1.name = 'c1';
-	c2.name = 'c2';
-	c1.startTime = c2.startTime = Date.now();
-
-	console.log( '---NO OVERLAP---' );
-	v.show( c1, 'some model', function() {
-
-		v.show( c2, 'some other model', function() {
-
-			console.log( '------------\n' );
-			doWithOnlyInitAndDestroy();
-		});
-	});
-}
-
-function doWithOnlyInitAndDestroy() {
-
-	var v = vm(),
-		c1 = Object.create( Content ),
-		c2 = Object.create( Content );
-
-	c1.name = 'c1';
-	c2.name = 'c2';
-	c1.startTime = c2.startTime = Date.now();
-	c1.aniIn = c2.aniIn = undefined;
-	c1.aniOut = c2.aniOut = undefined;
-
-	console.log( '---NO ANI---' );
-	v.show( c1, function() {
-
-		v.show( c2, function() {
-
-			console.log( '------------\n' );
-		});
-	});
-}
+nextTest();

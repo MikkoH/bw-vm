@@ -22,5 +22,7 @@
     "url": "https://github.com/MikkoH/bw-vm/issues"
   },
   "homepage": "https://github.com/MikkoH/bw-vm",
-  "dependencies": {}
+  "dependencies": {
+    "tape": "^3.0.3"
+  }
 }
