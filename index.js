@@ -1,11 +1,3 @@
-// overlap
-// width
-// height
-// onStartAniIn
-// onEndAniIn
-// onStartAniOut
-// onEndAniOut
-
 function ViewManager( settings ) {
 
 	if( !( this instanceof ViewManager ) ) 
@@ -19,7 +11,7 @@ function ViewManager( settings ) {
 
 	this.cContent = null;
 	this.nContent = null;
-};
+}
 
 ViewManager.prototype = {
 
@@ -76,11 +68,11 @@ ViewManager.prototype = {
 
 				if( onComplete )
 					onComplete( oldContent );
-			}.bind( this, this.cContent )
+			}.bind( this, this.cContent );
 
 			// now take out countent
-			if( this.cContent.aniOut )
-				this.cContent.aniOut( this.data , onOldOut );
+			if( this.cContent.animateOut )
+				this.cContent.animateOut( this.data , onOldOut );
 			else
 				onOldOut();
 		}
@@ -114,7 +106,8 @@ ViewManager.prototype = {
 				onOldOut;
 
 			// resize the newContent if it has a resize method
-			newContent.resize && newContent.resize( s.width, s.height );
+			if( newContent.resize )
+				newContent.resize( s.width, s.height );
 
 			// call a callback that we're starting to animatein content
 			if( s.onStartAniIn ) 
@@ -134,8 +127,8 @@ ViewManager.prototype = {
 
 					if( !s.overlap ) {
 
-						if( newContent.aniIn )
-							newContent.aniIn( this.data, onNewIn );
+						if( newContent.animateIn )
+							newContent.animateIn( this.data, onNewIn );
 						else
 							onNewIn();
 					}
@@ -145,23 +138,23 @@ ViewManager.prototype = {
 				if( s.onStartAniOut )
 					s.onStartAniOut( newContent, oldContent );
 
-				if( oldContent.aniOut )
-					oldContent.aniOut( this.data, onOldOut );
+				if( oldContent.animateOut )
+					oldContent.animateOut( this.data, onOldOut );
 				else
 					onOldOut();
 
 				if( s.overlap ) {
 
-					if( newContent.aniIn )
-						newContent.aniIn( this.data, onNewIn );
+					if( newContent.animateIn )
+						newContent.animateIn( this.data, onNewIn );
 					else
 						onNewIn();
 				}
 			} else {
 
 				// just bring new content
-				if( newContent.aniIn )
-					newContent.aniIn( this.data, onNewIn );
+				if( newContent.animateIn )
+					newContent.animateIn( this.data, onNewIn );
 				else
 					onNewIn();
 			}

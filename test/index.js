@@ -61,23 +61,23 @@ section.prototype = {
 		}
 	},
 
-	aniIn: function( req, done ) {
+	animateIn: function( req, done ) {
 		switch( idxText ) {
 
 			case 1:
-				t.equal( this.name, 'section 1', 'section 1 aniIn' );
+				t.equal( this.name, 'section 1', 'section 1 animateIn' );
 				nextTest();
 				done();
 			break;
 
 			case 3:
-				t.equal( this.name, 'section 2', 'section 2 aniIn' );
+				t.equal( this.name, 'section 2', 'section 2 animateIn' );
 				done();
 				nextTest();
 			break;
 
 			case 4:
-				t.equal( this.name, 'section 3', 'section 3 aniIn' );
+				t.equal( this.name, 'section 3', 'section 3 animateIn' );
 				done();
 
 				nextTest();
@@ -90,21 +90,21 @@ section.prototype = {
 		}
 	},
 
-	aniOut: function( req, done ) {
+	animateOut: function( req, done ) {
 		switch( idxText ) {
 
 			case 3:
-				t.equal( this.name, 'section 1', 'section 1 aniOut' );
+				t.equal( this.name, 'section 1', 'section 1 animateOut' );
 				done();
 			break;
 
 			case 4:
-				t.equal( this.name, 'section 2', 'section 2 aniOut' );
+				t.equal( this.name, 'section 2', 'section 2 animateOut' );
 				done();
 			break;
 
 			case 5:
-				t.equal( this.name, 'section 3', 'section 3 aniOut' );
+				t.equal( this.name, 'section 3', 'section 3 animateOut' );
 				done();
 			break;
 		}
@@ -144,7 +144,7 @@ function nextTest() {
 	switch( idxText ) {
 		case 1:
 
-			test( 'section init, aniIn, resize', function( nT ) {
+			test( 'section init, animateIn, resize', function( nT ) {
 
 				t = nT;
 				t.plan( 6 );
@@ -194,7 +194,7 @@ function nextTest() {
 
 		case 5:
 
-			test( 'bring in section 4 without init, aniIn', function( nT ) {
+			test( 'bring in section 4 without init, animateIn', function( nT ) {
 
 				t = nT;
 				t.plan( 2 );
@@ -202,8 +202,8 @@ function nextTest() {
 				var nSection = new section( 'section 4' );
 
 				nSection.init = undefined;
-				nSection.aniIn = undefined;
-				nSection.aniOut = undefined;
+				nSection.animateIn = undefined;
+				nSection.animateOut = undefined;
 
 				manager.show( nSection );
 			});
@@ -211,7 +211,7 @@ function nextTest() {
 
 		case 6:
 
-			test( 'bring in section 5 test skipping aniOut on section 4', function( nT ) {
+			test( 'bring in section 5 test skipping animateOut on section 4', function( nT ) {
 
 				t = nT;
 				t.plan( 3 );
