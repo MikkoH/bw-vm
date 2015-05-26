@@ -14,17 +14,7 @@ function ViewManager( settings ) {
   this.nContent = null;
 }
 
-ViewManager.prototype = {
-
-  get overlap() {
-
-    return this.s.overlap;
-  },
-
-  set overlap( value ) {
-
-    this.s.overlap = value;
-  },
+var p = ViewManager.prototype = {
 
   show: function( content, data, onComplete ) {
 
@@ -190,5 +180,15 @@ ViewManager.prototype = {
     }
   }
 };
+
+Object.defineProperty(p, 'overlap', {
+  get: function() {
+    return this.s.overlap;
+  },
+
+  set: function(value) {
+    this.s.overlap = value;
+  }
+});
 
 module.exports = ViewManager;
