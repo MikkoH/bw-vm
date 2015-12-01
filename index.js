@@ -45,7 +45,17 @@ var p = ViewManager.prototype = {
     }
   },
 
-  clear: function( onComplete ) {
+  clear: function( data, onComplete ) {
+
+    // check if data was passed in
+    if( onComplete === undefined &&
+      typeof data == 'function' ) {
+
+      onComplete = data;
+      data = null;
+    }
+
+    this.data = data;
 
     if( this.nContent && this.nContent.destroy ) {
       this.nContent.destroy( this.data, function() { } );
