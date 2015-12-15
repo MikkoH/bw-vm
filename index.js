@@ -191,14 +191,16 @@ var p = ViewManager.prototype = {
   }
 };
 
-Object.defineProperty(p, 'overlap', {
-  get: function() {
-    return this.s.overlap;
-  },
+if (Object.defineProperty) {
+  Object.defineProperty(p, 'overlap', {
+    get: function() {
+      return this.s.overlap;
+    },
 
-  set: function(value) {
-    this.s.overlap = value;
-  }
-});
+    set: function(value) {
+      this.s.overlap = value;
+    }
+  });
+}
 
 module.exports = ViewManager;
