@@ -191,7 +191,8 @@ var p = ViewManager.prototype = {
   }
 };
 
-if (Object.defineProperty) {
+// The try catch is needed for <IE9
+try {
   Object.defineProperty(p, 'overlap', {
     get: function() {
       return this.s.overlap;
@@ -201,6 +202,6 @@ if (Object.defineProperty) {
       this.s.overlap = value;
     }
   });
-}
+} catch(e) {}
 
 module.exports = ViewManager;
