@@ -72,6 +72,11 @@ var p = ViewManager.prototype = {
         if( onComplete ) {
           onComplete( oldContent );
         }
+        
+        if ( this.cContent === oldContent ) {
+          this.cContent = null;
+        }
+
       }.bind( this, this.cContent );
 
       // now take out countent
