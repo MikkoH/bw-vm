@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MikkoH/bw-vm.git"
+    "url": "https://github.com/bigwheel-framework/bw-vm.git"
   },
   "keywords": [
     "bigwheel",
@@ -32,9 +32,9 @@
   "author": "Mikko Haapoja <me@mikkoh.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MikkoH/bw-vm/issues"
+    "url": "https://github.com/bigwheel-framework/bw-vm/issues"
   },
-  "homepage": "https://github.com/MikkoH/bw-vm",
+  "homepage": "https://github.com/bigwheel-framework/bw-vm",
   "dependencies": {},
   "devDependencies": {
     "tape": "^3.0.3"
